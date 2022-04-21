@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 '''
-Copyright (c) 2020 RIKEN
+Copyright (c) 2022 RIKEN
 All Rights Reserved
 See file LICENSE for details.
 '''
@@ -11,12 +11,7 @@ import os,sys,datetime,argparse,glob,logging
 
 
 # version
-version='2020/12/02'
-
-
-# HHV-6 refseq IDs
-hhv6a_refid='NC_001664.4'
-hhv6b_refid='NC_000898.1'
+version='2022/04/21'
 
 
 # args
@@ -109,30 +104,6 @@ filenames.tmp_rg_bam          =os.path.join(args.outdir, 'tmp_rg.bam')
 filenames.tmp_fa              =os.path.join(args.outdir, 'tmp.fa')
 filenames.tmp_masked_fa       =os.path.join(args.outdir, 'tmp_masked.fa')
 filenames.tmp_fa_dict         =os.path.join(args.outdir, 'tmp.dict')
-filenames.hhv6a_vcf_gz        =os.path.join(args.outdir, 'hhv6a.vcf.gz')
-filenames.hhv6a_norm_vcf_gz   =os.path.join(args.outdir, 'hhv6a_norm.vcf.gz')
-filenames.hhv6a_gatk_naive    =os.path.join(args.outdir, 'hhv6a_reconstructed.fa')
-filenames.hhv6b_vcf_gz        =os.path.join(args.outdir, 'hhv6b.vcf.gz')
-filenames.hhv6b_norm_vcf_gz   =os.path.join(args.outdir, 'hhv6b_norm.vcf.gz')
-filenames.hhv6b_gatk_naive    =os.path.join(args.outdir, 'hhv6b_reconstructed.fa')
-filenames.hhv6a_metaspades_o  =os.path.join(args.outdir, 'hhv6a_metaspades_assembly')
-filenames.hhv6b_metaspades_o  =os.path.join(args.outdir, 'hhv6b_metaspades_assembly')
-
-filenames.hhv6_dr_ref         =os.path.join(init.base,   'lib/HHV6_only_DR.fa')
-filenames.hhv6_dr_index       =os.path.join(init.base,   'lib/hisat2_index/HHV6_only_DR')
-filenames.mapped_to_dr_bam    =os.path.join(args.outdir, 'mapped_to_DR_dedup.bam')
-filenames.mapped_to_dr_bai    =os.path.join(args.outdir, 'mapped_to_DR_dedup.bai')
-filenames.markdup_metrix_dr   =os.path.join(args.outdir, 'mark_duplicate_metrix_DR.txt')
-filenames.bedgraph_dr         =os.path.join(args.outdir, 'mapped_to_DR.bedgraph')
-filenames.summary_dr          =os.path.join(args.outdir, 'mapping_DR_summary.txt')
-filenames.high_cov_pdf_dr     =os.path.join(args.outdir, 'coverage_DR.pdf')
-
-filenames.hhv6a_dr_vcf_gz     =os.path.join(args.outdir, 'hhv6a_DR.vcf.gz')
-filenames.hhv6a_dr_norm_vcf_gz=os.path.join(args.outdir, 'hhv6a_DR_norm.vcf.gz')
-filenames.hhv6a_dr_gatk_naive =os.path.join(args.outdir, 'hhv6a_DR_reconstructed.fa')
-filenames.hhv6b_dr_vcf_gz     =os.path.join(args.outdir, 'hhv6b_DR.vcf.gz')
-filenames.hhv6b_dr_norm_vcf_gz=os.path.join(args.outdir, 'hhv6b_DR_norm.vcf.gz')
-filenames.hhv6b_dr_gatk_naive =os.path.join(args.outdir, 'hhv6b_DR_reconstructed.fa')
 
 
 # 0. Unmapped read retrieval
@@ -164,26 +135,6 @@ if mapping.read_mapped is True:
     log.logger.info('Identification of high-coverage viruses started.')
     identify_high_cov.identify_high_cov_virus_from_bedgraph(args, params, filenames)
     
-    # 3. reconstruct HHV-6
-    import reconstruct_hhv6,reconstruct_hhv6_dr
-    if identify_high_cov.hhv6a_highcov is True:
-        log.logger.info('HHV-6A full sequence reconstruction started.')
-        reconstruct_hhv6.reconst_a(args, params, filenames, hhv6a_refid)
-        log.logger.info('HHV-6A DR sequence reconstruction started.')
-        reconstruct_hhv6_dr.map_to_dr(args, params, filenames, hhv6a_refid)
-        reconstruct_hhv6_dr.output_summary(args, params, filenames)
-        reconstruct_hhv6_dr.reconst_a(args, params, filenames, hhv6a_refid)
-    if identify_high_cov.hhv6b_highcov is True:
-        log.logger.info('HHV-6B full sequence reconstruction started.')
-        reconstruct_hhv6.reconst_b(args, params, filenames, hhv6b_refid)
-        log.logger.info('HHV-6B DR sequence reconstruction started.')
-        reconstruct_hhv6_dr.map_to_dr(args, params, filenames, hhv6b_refid)
-        reconstruct_hhv6_dr.output_summary(args, params, filenames)
-        reconstruct_hhv6_dr.reconst_b(args, params, filenames, hhv6b_refid)
-    if args.keep is False:
-        os.remove(filenames.mapped_to_virus_bai)
-        if os.path.exists(filenames.mapped_to_dr_bai) is True:
-            os.remove(filenames.mapped_to_dr_bai)
 else:
     log.logger.info('No read was mapped.')
 
