@@ -64,10 +64,10 @@ fq1=/path/to/unmapped_fastq_1.fq
 fq2=/path/to/unmapped_fastq_2.fq
 
 # hisat2 index of 'anelloviridae.human_complete.220421.masked.fa'
-ht2_index=./anellovirus_fa/ht2_index/anelloviridae.human_complete.220421.masked
+ht2_index=./human_anellovirus_detection/anellovirus_fa/ht2_index/anelloviridae.human_complete.220421.masked
 
 python human_anellovirus_detection/main.py \
--vref ./anellovirus_fa/anelloviridae.human_complete.220421.masked.fa \
+-vref ./human_anellovirus_detection/anellovirus_fa/anelloviridae.human_complete.220421.masked.fa \
 -vrefindex ${ht2_index} \
 -picard /usr/local/bin/picard.jar \
 -fastqin \
