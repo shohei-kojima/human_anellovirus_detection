@@ -79,8 +79,8 @@ python human_anellovirus_detection/main.py \
 ## Counting reads mapping to anelloviruses  
 - Here we counted the reads mapping to at least one anellovirus sequence of the masked 3,333 anellovirus sequences.  
 - We counted reads satisfying below:  
-    - Both read 1 and read 2 are mapping to the same anellovirus sequence.  
     - Read is not PCR duplicates.  
+    - At least read 1 and the read 2 of the read pair is mapping to at least one anellovirus genome.  
 
 ```
 python human_anellovirus_detection/helper_scripts/count_anellovirus_reads.py \
